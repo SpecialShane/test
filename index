@@ -1,0 +1,27 @@
+import discord
+
+client = discord.Client()
+
+@client.event
+async def on_ready():
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
+
+@client.command()
+async def play(ctx, url: str):
+    channel = ctx.message.author.voice.channel
+    voice = await channel.connect()
+
+    voice.play(discord.FFmpegPCMAudio(url))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 0.07
+
+@client.command()
+async def stop(ctx):
+    voice = ctx.voice_client
+
+    await voice.disconnect()
+
+client.run('o2LTZMbLLlaUZNnrbIRB5Wh3rkQPMmDc')
